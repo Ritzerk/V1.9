@@ -218,14 +218,14 @@ class Oven (threading.Thread):
             'runtime': self.runtime,
             'temperature': self.temp_sensor.temperature,
             'target': self.target,
-			'lastTarget': self.lastTarget,
+	    'lastTarget': self.lastTarget,
             'state': self.state,
             'heat': self.heat,	
             'air': self.air,
             'totaltime': self.totaltime,
 	    'door': self.door,
-	    'coolMsg': self.coolMsg
-		'cooling': self.cooling
+	    'coolMsg': self.coolMsg,
+	    'cooling': self.cooling
         }
         return state
         
