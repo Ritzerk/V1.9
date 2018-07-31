@@ -105,7 +105,7 @@ class Oven (threading.Thread):
 	
         while True:
 	    self.door = "CLOSED"
-		self.coolMsg = "NOT"
+	    self.coolMsg = "NOT"
 			
             if self.state == Oven.STATE_RUNNING:	
 	        self.set_air(True)		#Keep fan always on when its running
