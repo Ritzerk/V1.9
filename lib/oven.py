@@ -122,7 +122,7 @@ class Oven (threading.Thread):
 
                 log.info("pid: %.3f" % pid)
 				
-		if ((self.target < self.lastTarget) && (self.cooling == 1)):
+		if ((self.target < self.lastTarget) and (self.cooling == 1)):
 		    self.coolMsg = "NOW"
 		    self.set_buzz(True)
 		    time.sleep(0.5)
