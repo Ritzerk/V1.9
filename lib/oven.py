@@ -174,6 +174,7 @@ class Oven (threading.Thread):
 		    self.set_buzz(False)
 		    time.sleep(1)
 		    f.write('\n')
+		    f.flush()
                     self.reset()
             
             if pid > 0:
