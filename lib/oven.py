@@ -120,10 +120,10 @@ class Oven (threading.Thread):
 
                 log.info("pid: %.3f" % pid)
 				
-		if ((self.target < self.lastTarget) and (self.cooling == 1)):
-		    self.cooling = 0	
+		if ((self.target < self.lastTarget) and (self.cooling == 1)):	
 		    self.set_buzz(True)
 		    time.sleep(0.5)
+		    self.cooling = 0
 		    self.set_buzz(False)
 		    time.sleep(0.5)
 		    self.set_buzz(True)
