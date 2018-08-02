@@ -104,7 +104,7 @@ class Oven (threading.Thread):
         self.reset()
 
     def run(self):		
-	f = open(nameDir, 'a+')
+	f = open(nameDir, 'a')
         temperature_count = 0
         last_temp = 0
         pid = 0
