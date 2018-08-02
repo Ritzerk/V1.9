@@ -125,7 +125,7 @@ class Oven (threading.Thread):
 		self.target = self.profile.get_target_temperature(self.runtime)
                 pid = self.pid.compute(self.target, self.temp_sensor.temperature)
 		
-		if self.runtime <= 0.3:
+		if self.runtime <= 0.5:
 		    f = open(nameDir, 'a')
 		    f.write(now.strftime("%Y-%m-%d %H:%M"))
 	            f.write('\n\n')
