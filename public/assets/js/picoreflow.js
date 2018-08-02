@@ -559,7 +559,7 @@ $(document).ready(function()
                 if (x.temperature > hazardTemp()) { $('#hazard').addClass("ds-led-hazard-active"); } else { $('#hazard').removeClass("ds-led-hazard-active"); }
                 if (x.door == "OPEN") { $('#door').addClass("ds-led-door-open"); } else { $('#door').removeClass("ds-led-door-open"); }
 		if (x.coolMsg == "NOW") { 
-		    $.bootstrapGrowl("<span class=\"glyphicon glyphicon-exclamation-sign\"></span> <b>Info:</b><br/>Please open vent, cooling stage is on.", {
+		    $.bootstrapGrowl("<span class=\"glyphicon glyphicon-exclamation-sign\"></span> <b>Info:</b><br/>Please open door, cooling stage is on.", {
                     ele: 'body', // which element to append to
 		    type: 'info', // (null, 'info', 'error', 'success')
 		    offset: {from: 'top', amount: 250}, // 'top', or 'bottom'
@@ -569,7 +569,6 @@ $(document).ready(function()
 		    allow_dismiss: true,
 		    stackup_spacing: 10 // spacing between consecutively stacked growls.
 		    });
-			x.coolMsg = "NOT";
 		}
                 state_last = state;
             }
