@@ -104,21 +104,17 @@ class Oven (threading.Thread):
         self.reset()
 
     def run(self):		
-	f = open(nameDir, 'a')
+	
         temperature_count = 0
         last_temp = 0
         pid = 0
-	
-	f.write(now.strftime("%Y-%m-%d %H:%M"))
-	f.write('\n\n')
-	f.write('\tTime(s)\tTemperature(C)\n')
 	
         while True:
 	    self.door = "CLOSED"
 		
             if self.state == Oven.STATE_RUNNING:	
 	        self.set_air(True)		#Keep fan always on when its running
-	      	
+		
                 if self.simulate:
                     self.runtime += 0.5
                 else:
@@ -128,7 +124,13 @@ class Oven (threading.Thread):
                 self.lastTarget = self.target
 		self.target = self.profile.get_target_temperature(self.runtime)
                 pid = self.pid.compute(self.target, self.temp_sensor.temperature)
-
+		
+		if self.runtime == self.start_time:
+		    f = open(nameDir, 'a')
+		    f.write(now.strftime("%Y-%m-%d %H:%M"))
+	            f.write('\n\n')
+	            f.write('\tTime(s)\tTemperature(C)\n')
+		
 		f.write('\t%.1f\t%.1f\n' % (self.runtime, self.temp_sensor.temperature))
                 log.info("pid: %.3f" % pid)
 				
@@ -174,7 +176,7 @@ class Oven (threading.Thread):
 		    self.set_buzz(False)
 		    time.sleep(1)
 		    f.write('\n')
-		    f.flush()
+		    f.close()
                     self.reset()
             
             if pid > 0:
@@ -182,7 +184,7 @@ class Oven (threading.Thread):
             else:
                 time.sleep(self.time_step)
 		
-        f.close()	
+        	
 
     def set_heat(self, value):
         if value > 0:
