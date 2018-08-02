@@ -4,10 +4,13 @@ import random
 import datetime
 import logging
 import json
+import os.path
 
 import config
 
 log = logging.getLogger(__name__)
+
+now = datetime.datetime.now()
 
 try:
     if config.max31855 + config.max6675 + config.max31855spi > 1:
@@ -108,7 +111,13 @@ class Oven (threading.Thread):
 			
             if self.state == Oven.STATE_RUNNING:	
 	        self.set_air(True)		#Keep fan always on when its running
-				
+		
+		nameDir = os.path.join('/home/pi/V1.8/Storage/', "DataLog.txt")
+	        f = open(nameDir, 'a')
+	        f.write(now.strftime("%Y-%m-%d %H:%M"))
+	        f.write('\n\n')
+	        f.write('\tTime(s)\tTemperature(C)\n')		
+			
                 if self.simulate:
                     self.runtime += 0.5
                 else:
@@ -119,6 +128,7 @@ class Oven (threading.Thread):
 		self.target = self.profile.get_target_temperature(self.runtime)
                 pid = self.pid.compute(self.target, self.temp_sensor.temperature)
 
+		f.write('\t%.1f\t%.1f\n' % (self.runtime, self.temp_sensor.temperature))
                 log.info("pid: %.3f" % pid)
 				
 		if ((self.target < self.lastTarget) and (self.cooling == 1)):
@@ -165,6 +175,8 @@ class Oven (threading.Thread):
 		    time.sleep(1)
 		    self.set_buzz(False)
 		    time.sleep(1)
+		    f.write('\n')
+		    f.close()
                     self.reset()
             
             if pid > 0:
