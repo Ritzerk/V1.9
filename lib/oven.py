@@ -11,6 +11,7 @@ import config
 log = logging.getLogger(__name__)
 
 now = datetime.datetime.now()
+nameDir = os.path.join('/home/pi/V1.8/Storage/', "DataLog.txt")
 
 try:
     if config.max31855 + config.max6675 + config.max31855spi > 1:
@@ -102,22 +103,21 @@ class Oven (threading.Thread):
         self.reset()
 
     def run(self):		#removed profile
+	f = open(nameDir, 'a')
         temperature_count = 0
         last_temp = 0
         pid = 0
 	
         while True:
 	    self.door = "CLOSED"
-			
+	
+	    f.write(now.strftime("%Y-%m-%d %H:%M"))
+	    f.write('\n\n')
+	    f.write('\tTime(s)\tTemperature(C)\n')
+		
             if self.state == Oven.STATE_RUNNING:	
 	        self.set_air(True)		#Keep fan always on when its running
-		
-		nameDir = os.path.join('/home/pi/V1.8/Storage/', "DataLog.txt")
-	        f = open(nameDir, 'a')
-	        f.write(now.strftime("%Y-%m-%d %H:%M"))
-	        f.write('\n\n')
-	        f.write('\tTime(s)\tTemperature(C)\n')		
-			
+	      	
                 if self.simulate:
                     self.runtime += 0.5
                 else:
@@ -141,11 +141,7 @@ class Oven (threading.Thread):
 		    self.set_buzz(True)
 		    time.sleep(0.5)
 		    self.set_buzz(False)
-		    self.cooling = 0
-				
-		#This is where we may ask user to open vent to cool, new function to pop window.
-                #self.set_cool(pid <= -1)	#Returns false or true, not required.
-		
+		    self.cooling = 0	
 				
                 if(pid > 0):
                     # The temp should be changing with the heat on
@@ -336,9 +332,6 @@ class Profile():
         obj = json.loads(json_data)
         self.name = obj["name"]
         self.data = sorted(obj["data"])
-	
-    #def get_stage5time(self):
-	#return self.data[4][0]			#return time when stage 5 starts, to send buzz
 	
     def get_duration(self):
         return max([t for (t, x) in self.data])
