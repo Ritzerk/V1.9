@@ -11,7 +11,7 @@ import config
 log = logging.getLogger(__name__)
 
 now = datetime.datetime.now()
-nameDir = os.path.join('/home/pi/V1.8/Storage/', "DataLog.txt")
+nameDir = os.path.join('/home/pi/V1.8/Storage/Logs/', "Date:" + now.strftime("%Y-%m-%d %H:%M") + ".txt")
 
 try:
     if config.max31855 + config.max6675 + config.max31855spi > 1:
@@ -90,6 +90,7 @@ class Oven (threading.Thread):
         self.set_air(False)
 	self.set_buzz(False)
         self.pid = PID(ki=config.pid_ki, kd=config.pid_kd, kp=config.pid_kp)
+	
 
     def run_profile(self, profile):
         log.info("Running profile %s" % profile.name)
@@ -102,18 +103,18 @@ class Oven (threading.Thread):
     def abort_run(self):
         self.reset()
 
-    def run(self):		#removed profile
+    def run(self):		
 	f = open(nameDir, 'a')
         temperature_count = 0
         last_temp = 0
         pid = 0
 	
+	f.write(now.strftime("%Y-%m-%d %H:%M"))
+	f.write('\n\n')
+	f.write('\tTime(s)\tTemperature(C)\n')
+	
         while True:
 	    self.door = "CLOSED"
-	
-	    f.write(now.strftime("%Y-%m-%d %H:%M"))
-	    f.write('\n\n')
-	    f.write('\tTime(s)\tTemperature(C)\n')
 		
             if self.state == Oven.STATE_RUNNING:	
 	        self.set_air(True)		#Keep fan always on when its running
@@ -156,9 +157,10 @@ class Oven (threading.Thread):
                     if temperature_count > 20:
                         log.info("Error reading sensor, oven temp not responding to heat.")
                         self.reset()
+
                 else:
                     temperature_count = 0
-                    
+                  
                 #Capture the last temperature value.  This must be done before set_heat, since there is a sleep in there now.
                 last_temp = self.temp_sensor.temperature
                 
@@ -172,13 +174,14 @@ class Oven (threading.Thread):
 		    self.set_buzz(False)
 		    time.sleep(1)
 		    f.write('\n')
-		    f.close()
                     self.reset()
             
             if pid > 0:
                 time.sleep(self.time_step * (1 - pid))
             else:
                 time.sleep(self.time_step)
+		
+        f.close()	
 
     def set_heat(self, value):
         if value > 0:
