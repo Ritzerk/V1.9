@@ -85,7 +85,7 @@ function deleteProfile()
 
 function outputMsg(dtta)
 {
-    if (dtta == 1) {
+    if (dtta == "NOW") {
         $.bootstrapGrowl("<span class=\"glyphicon glyphicon-exclamation-sign\"></span> <b>Info:</b><br/>Please open door, cooling stage is on.", {
         ele: 'body', // which element to append to
 	type: 'info', // (null, 'info', 'error', 'success')
@@ -576,7 +576,7 @@ $(document).ready(function()
                 if (x.temperature > hazardTemp()) { $('#hazard').addClass("ds-led-hazard-active"); } else { $('#hazard').removeClass("ds-led-hazard-active"); }
                 if (x.door == "OPEN") { $('#door').addClass("ds-led-door-open"); } else { $('#door').removeClass("ds-led-door-open"); }
 		
-		outputMsg(x.cooling);
+		outputMsg(x.coolMsg);
 		
                 state_last = state;
             }
