@@ -124,6 +124,7 @@ class Oven (threading.Thread):
                 if self.target <= 0:
 		    f = open(nameDir, 'a')
 		    f.write(now.strftime("%Y-%m-%d %H:%M"))
+		    f.write("\tProfile: " + self.profile.name)
 	            f.write('\n\n')
 	            f.write('\tTime(s)\tTemperature(C)\n')
 		self.lastTarget = self.target
