@@ -11,7 +11,7 @@ import config
 log = logging.getLogger(__name__)
 
 now = datetime.datetime.now()
-nameDir = os.path.join('/home/pi/V1.9/Storage/Logs', "Date_" + now.strftime("%Y-%m-%d") + ".txt")
+nameDir = os.path.join('/home/pi/V1.9/storage/Logs', "Date_" + now.strftime("%Y-%m-%d") + ".txt")
 
 try:
     if config.max31855 + config.max6675 + config.max31855spi > 1:
