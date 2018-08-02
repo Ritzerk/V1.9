@@ -576,7 +576,7 @@ $(document).ready(function()
                 if (x.temperature > hazardTemp()) { $('#hazard').addClass("ds-led-hazard-active"); } else { $('#hazard').removeClass("ds-led-hazard-active"); }
                 if (x.door == "OPEN") { $('#door').addClass("ds-led-door-open"); } else { $('#door').removeClass("ds-led-door-open"); }
 		
-		outputMsg(x.coolMsg);
+		//outputMsg(x.coolMsg);
 		
                 state_last = state;
             }
